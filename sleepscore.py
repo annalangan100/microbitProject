@@ -1,35 +1,8 @@
-data = []
-
-temp_data =  [28, 28, 27, 27, 27, 27, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 25, 26, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25]
-sound_data = [0, 7, 26, 0, 0, 0, 0, 3, 33, 7, 3, 0, 0, 7, 0, 0, 7, 3, 3, 0, 3, 3, 15, 3, 3, 3, 7, 3, 0, 0]
-light_data = [0, 0, 0, 0, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2, 2, 2, 35, 2, 2, 2, 5, 5, 5, 6]
-
-
-for i in range(len(temp_data)):
-    print(temp_data[i])
-    
-    if temp_data[i] > -10 and temp_data[i] < 30:
-        data.append(temp_data[i])
-    else:
-        print("Value: ", temp_data[i], "is not a valid value")
-  
-for i in range(len(light_data)):
-    print(light_data[i])
-    if light_data[i] > -10 and light_data[i] < 200:
-        data.append(light_data[i])
-    else:
-        print("Value: ", light_data[i], "is not a valid value")
-
-for i in range(len(sound_data)):
-    print(sound_data[i])
-    if sound_data[i] > -10 and sound_data[i] < 200:
-        data.append(sound_data[i])
-    else:
-        print("Value: ", sound_data[i], "is not a valid value")
-        
-print(data)
-
 import csv
+
+temp_data =  [13, 28, 14, 27, 27, 27, 26, 26, 26, 13, 26, 14, 26, 26, 26, 26, 26, 26, 25, 26, 15, 25, 12, 13, 25, 25, 25, 14, 25, 25]
+sound_data = [0, 7, 26, 0, 0, 15, 0, 3, 33, 7, 3, 0, 0, 7, 0, 0, 7, 3, 3, 0, 3, 3, 15, 3, 3, 3, 7, 3, 0, 0]
+light_data = [190, 0, 184, 0, 0, 2, 0, 2, 2, 190, 2, 181, 2, 2, 2, 2, 181, 3, 3, 2, 186, 0, 190, 2, 2, 2, 189, 170, 5, 6]
 
 max_length = max(len(temp_data), len(sound_data), len(light_data))
 temp_data += [None] * (max_length - len(temp_data))
@@ -56,49 +29,49 @@ for data in data_base[1:]:
 import csv
 
 day_data = [
-    [1, 28, 0, 0],
-    [2, 28, 0, 7],
-    [3, 27, 0, 26],
+    [1, 13, 0, 190],
+    [2, 28, 7, 0],
+    [3, 14, 26, 184],
     [4, 27, 0, 0],
     [5, 27, 0, 0],
-    [6, 27, 2, 0],
+    [6, 27, 15, 2],
     [7, 26, 0, 0],
-    [8, 26, 2, 3],
-    [9, 26, 2, 33],
-    [10, 26, 2, 7],
-    [11, 26, 2, 3],
-    [12, 26, 2, 0],
-    [13, 26, 2, 0],
-    [14, 26, 2, 7],
-    [15, 26, 2, 0],
-    [16, 26, 2, 0],
-    [17, 26, 3, 7],
+    [8, 26, 3, 2],
+    [9, 26, 33, 2],
+    [10, 13, 7, 190],
+    [11, 26, 3, 2],
+    [12, 14, 0, 181],
+    [13, 26, 0, 2],
+    [14, 26, 7, 2],
+    [15, 26, 0, 2],
+    [16, 26, 0, 2],
+    [17, 26, 7, 181],
     [18, 26, 3, 3],
-    [19, 26, 3, 3],
-    [20, 25, 2, 0],
-    [21, 26, 2, 3],
-    [22, 25, 2, 3],
-    [23, 25, 35, 15],
-    [24, 25, 2, 3],
-    [25, 25, 2, 3],
-    [26, 25, 2, 3],
-    [27, 25, 5, 7],
-    [28, 25, 5, 3],
-    [29, 25, 5, 0],
-    [30, 25, 6, 0]
+    [19, 25, 3, 3],
+    [20, 26, 0, 2],
+    [21, 14, 3, 186],
+    [22, 25, 3, 0],
+    [23, 12, 15, 190],
+    [24, 13, 3, 2],
+    [25, 25, 3, 2],
+    [26, 25, 3, 2],
+    [27, 25, 7, 189],
+    [28, 14, 3, 170],
+    [29, 25, 0, 5],
+    [30, 25, 0, 6]
 ]
 
 # Write data to CSV file
 with open("sleepscore.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Day", "Temperature", "Light", "Sound"])
+    writer.writerow(["Day", "Temperature", "Sound", "Light"])
     writer.writerows(day_data)
 
 print("Data has been written to sleepscore.csv.")
 
 import csv
 
-def calculate_sleep_score(temperature, light_level, sound_level):
+def calculate_sleep_score(temperature, sound_level, light_level):
     score = 0
 
     # Check temperature conditions
@@ -121,10 +94,10 @@ def get_sleep_data(day):
         reader = csv.DictReader(file)
         for row in reader:
             if int(row['Day']) == day:
-                return float(row['Temperature']), float(row['Light']), float(row['Sound'])
+                return float(row['Temperature']), float(row['Sound']), float(row['Light'])
     return None
 
-def get_sleep_advice(temperature, light_level, sound_level):
+def get_sleep_advice(temperature, sound_level, light_level):
     advice = []
 
     # Temperature advice
@@ -151,15 +124,15 @@ if 1 <= day <= 30:
     sleep_data = get_sleep_data(day)
 
     if sleep_data:
-        temperature, light_level, sound_level = sleep_data
+        temperature, sound_level, light_level = sleep_data
 
         # Calculate sleep score as a percentage
-        sleep_score_percentage = calculate_sleep_score(temperature, light_level, sound_level)
+        sleep_score_percentage = calculate_sleep_score(temperature, sound_level, light_level)
 
         print("Sleep Score Percentage for Day", day, ":", sleep_score_percentage, "%")
 
         # Get sleep advice
-        advice = get_sleep_advice(temperature, light_level, sound_level)
+        advice = get_sleep_advice(temperature, sound_level, light_level)
         if advice:
             print("To improve your sleep:")
             for tip in advice:
@@ -175,42 +148,42 @@ else:
 import csv
 
 day_data = [
-    [1, 28, 0, 0, 7],
-    [2, 28, 0, 7, 6],
-    [3, 27, 0, 26, 5],
-    [4, 27, 0, 0, 6],
-    [5, 27, 0, 0, 6],
-    [6, 27, 2, 0, 6],
+    [1, 13, 0, 190, 5],
+    [2, 28, 7, 0, 6],
+    [3, 14, 26, 184, 5],
+    [4, 27, 0, 0, 7],
+    [5, 27, 0, 0, 7],
+    [6, 27, 15, 2, 6],
     [7, 26, 0, 0, 7],
-    [8, 26, 2, 3, 6],
-    [9, 26, 2, 33, 5],
-    [10, 26, 2, 7, 7],
-    [11, 26, 2, 3, 6],
-    [12, 26, 2, 0, 6],
-    [13, 26, 2, 0, 6],
-    [14, 26, 2, 7, 5],
-    [15, 26, 2, 0, 7],
-    [16, 26, 2, 0, 6],
-    [17, 26, 3, 7, 7],
-    [18, 26, 3, 3, 5],
-    [19, 26, 3, 3, 5],
-    [20, 25, 2, 0, 7],
-    [21, 26, 2, 3, 7],
-    [22, 25, 2, 3, 7],
-    [23, 25, 35, 15, 7],
-    [24, 25, 2, 3, 7],
-    [25, 25, 2, 3, 7],
-    [26, 25, 2, 3, 7],
-    [27, 25, 5, 7, 7],
-    [28, 25, 5, 3, 7],
-    [29, 25, 5, 0, 6],
-    [30, 25, 6, 0, 6]
+    [8, 26, 3, 2, 7],
+    [9, 26, 33, 2, 5],
+    [10, 13, 7, 190, 4],
+    [11, 26, 3, 2, 6],
+    [12, 14, 0, 181, 5],
+    [13, 26, 0, 2, 7],
+    [14, 26, 7, 2, 6],
+    [15, 26, 0, 2, 6],
+    [16, 26, 0, 2, 7],
+    [17, 26, 7, 181, 5],
+    [18, 26, 3, 3, 7                                                                       ],
+    [19, 25, 3, 3, 6],
+    [20, 26, 0, 2, 6],
+    [21, 14, 3, 186, 4],
+    [22, 25, 3, 0, 7],
+    [23, 12, 15, 190, 4],
+    [24, 13, 3, 2, 5],
+    [25, 25, 3, 2, 7],
+    [26, 25, 3, 2, 7],
+    [27, 25, 7, 189, 4],
+    [28, 14, 3, 170,4],
+    [29, 25, 0, 5, 6],
+    [30, 25, 0, 6, 6]
 ]
 
 # Write data to CSV file
 with open("sleepscore.csv", "w", newline="") as file:
     writer = csv.writer(file)
-    writer.writerow(["Day", "Temperature", "Light", "Sound", "Sleep Time"])
+    writer.writerow(["Day", "Temperature", "Sound", "Light", "Sleep Time"])
     writer.writerows(day_data)
 
 print("Data has been written to sleepscore.csv.")
