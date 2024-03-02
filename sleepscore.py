@@ -96,30 +96,24 @@ with open("sleepscore.csv", "w", newline="") as file:
 
 print("Data has been written to sleepscore.csv.")
 
-
 import csv
 
 def calculate_sleep_score(temperature, light_level, sound_level):
-    # Initialize sleep score increase to 0
-    score_increase = 0
+    score = 0
 
     # Check temperature conditions
     if 15 <= temperature <= 20:
-        score_increase += 33.333333333  # Increase sleep score by 33.333333333%
+        score += 33.333333333  # Increase sleep score by 33.333333333%
     
     # Check light level conditions
     if light_level < 180:
-        score_increase += 33.333333333  # Increase sleep score by 33.333333333%
+        score += 33.333333333  # Increase sleep score by 33.333333333%
     
     # Check sound level conditions
     if sound_level < 30:
-        score_increase += 33.333333333  # Increase sleep score by 33.333333333%
+        score += 33.333333333  # Increase sleep score by 33.333333333%
     
-    return score_increase
-
-def calculate_sleep_score_percentage(score_increase):
-    # Cap the sleep score increase at 100%
-    return min(score_increase, 100)
+    return min(score, 100)  # Cap the sleep score at 100%
 
 def get_sleep_data(day):
     # Load sleep data from CSV file
@@ -129,6 +123,25 @@ def get_sleep_data(day):
             if int(row['Day']) == day:
                 return float(row['Temperature']), float(row['Light']), float(row['Sound'])
     return None
+
+def get_sleep_advice(temperature, light_level, sound_level):
+    advice = []
+
+    # Temperature advice
+    if temperature < 15:
+        advice.append("Increase the room temperature to improve sleep.")
+    elif temperature > 20:
+        advice.append("Lower the room temperature to improve sleep.")
+
+    # Light advice
+    if light_level > 180:
+        advice.append("Dim the lights or use blackout curtains to reduce light exposure.")
+
+    # Sound advice
+    if sound_level > 30:
+        advice.append("Reduce noise levels by using earplugs or white noise machines.")
+
+    return advice
 
 # Ask user for the day number they want to check
 day = int(input("Enter the day number you want to check (1 to 30): "))
@@ -140,15 +153,65 @@ if 1 <= day <= 30:
     if sleep_data:
         temperature, light_level, sound_level = sleep_data
 
-        # Calculate sleep score increase
-        score_increase = calculate_sleep_score(temperature, light_level, sound_level)
-
         # Calculate sleep score as a percentage
-        sleep_score_percentage = calculate_sleep_score_percentage(score_increase)
+        sleep_score_percentage = calculate_sleep_score(temperature, light_level, sound_level)
 
-        print("Sleep Score Increase for Day", day, ":", score_increase, "%")
         print("Sleep Score Percentage for Day", day, ":", sleep_score_percentage, "%")
+
+        # Get sleep advice
+        advice = get_sleep_advice(temperature, light_level, sound_level)
+        if advice:
+            print("To improve your sleep:")
+            for tip in advice:
+                print("-", tip)
+        else:
+            print("No specific advice for improving sleep based on the data.")
     else:
         print("No data found for day", day)
 else:
     print("Invalid day number. Please enter a number between 1 and 30.")
+
+
+import csv
+
+day_data = [
+    [1, 28, 0, 0, 7],
+    [2, 28, 0, 7, 6],
+    [3, 27, 0, 26, 5],
+    [4, 27, 0, 0, 6],
+    [5, 27, 0, 0, 6],
+    [6, 27, 2, 0, 6],
+    [7, 26, 0, 0, 7],
+    [8, 26, 2, 3, 6],
+    [9, 26, 2, 33, 5],
+    [10, 26, 2, 7, 7],
+    [11, 26, 2, 3, 6],
+    [12, 26, 2, 0, 6],
+    [13, 26, 2, 0, 6],
+    [14, 26, 2, 7, 5],
+    [15, 26, 2, 0, 7],
+    [16, 26, 2, 0, 6],
+    [17, 26, 3, 7, 7],
+    [18, 26, 3, 3, 5],
+    [19, 26, 3, 3, 5],
+    [20, 25, 2, 0, 7],
+    [21, 26, 2, 3, 7],
+    [22, 25, 2, 3, 7],
+    [23, 25, 35, 15, 7],
+    [24, 25, 2, 3, 7],
+    [25, 25, 2, 3, 7],
+    [26, 25, 2, 3, 7],
+    [27, 25, 5, 7, 7],
+    [28, 25, 5, 3, 7],
+    [29, 25, 5, 0, 6],
+    [30, 25, 6, 0, 6]
+]
+
+# Write data to CSV file
+with open("sleepscore.csv", "w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Day", "Temperature", "Light", "Sound", "Sleep Time"])
+    writer.writerows(day_data)
+
+print("Data has been written to sleepscore.csv.")
+
