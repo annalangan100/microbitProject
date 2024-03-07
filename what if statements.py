@@ -47,7 +47,8 @@ with open('sleepscore.csv', 'r') as file:
 
 for column in transposed_data:
     light_level = int(column[3])
-    temperature = column[1]      sleep_time = int(column[4])
+    temperature = column[1]      
+    sleep_time = int(column[4])
     
     new_sleep_time = reduce_sleep_time(light_level, temperature, sleep_time)
     print("New sleep time:", new_sleep_time)
