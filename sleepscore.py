@@ -1,3 +1,34 @@
+data = []
+
+temp_data =  [28, 28, 27, 27, 27, 27, 26, 26, 26, 13, 26, 14, 26, 26, 26, 26, 26, 26, 25, 26, 15, 25, 12, 13, 25, 25, 25, 14, 25, 25]
+sound_data = [0, 7, 26, 0, 0, 15, 0, 3, 33, 7, 3, 0, 0, 7, 0, 0, 7, 3, 3, 0, 3, 3, 15, 3, 3, 3, 7, 3, 0, 0]
+light_data = [190, 0, 0, 0, 184, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 181, 3, 3, 2, 2, 2, 35, 2, 2, 2, 189, 5, 5, 6]
+
+
+for i in range(len(temp_data)):
+    print(temp_data[i])
+    
+    if temp_data[i] > -10 and temp_data[i] < 50:
+        data.append(temp_data[i])
+    else:
+        print("Value: ", temp_data[i], "is not a valid value")
+  
+for i in range(len(light_data)):
+    print(light_data[i])
+    if light_data[i] > -10 and light_data[i] < 200:
+        data.append(light_data[i])
+    else:
+        print("Value: ", light_data[i], "is not a valid value")
+
+for i in range(len(sound_data)):
+    print(sound_data[i])
+    if sound_data[i] > -10 and sound_data[i] < 200:
+        data.append(sound_data[i])
+    else:
+        print("Value: ", sound_data[i], "is not a valid value")
+        
+print(data)
+
 import csv
 
 temp_data =  [13, 28, 14, 27, 27, 27, 26, 26, 26, 13, 26, 14, 26, 26, 26, 26, 26, 26, 25, 26, 15, 25, 12, 13, 25, 25, 25, 14, 25, 25]
@@ -145,6 +176,7 @@ else:
     print("Invalid day number. Please enter a number between 1 and 30.")
 
 
+
 import csv
 
 day_data = [
@@ -188,3 +220,83 @@ with open("sleepscore.csv", "w", newline="") as file:
 
 print("Data has been written to sleepscore.csv.")
 
+
+print("Is sleep time reduced when temperature is high and noise levels are greater than 30dB?")
+def reduce_sleep_time(noise_level, temperature, sleep_time):
+    if noise_level > 30 and temperature == 'high':
+        sleep_time -= 1
+    return sleep_time
+
+# Function to convert temperature data
+def convert_temperature(temp):
+    if temp > 20:
+        return 'high'
+    elif temp < 15:
+        return 'low'
+    else:
+        return 'normal'
+
+# Read data from CSV file
+with open('sleepscore.csv', 'r') as file:
+    reader = csv.reader(file)
+    header = next(reader)  # Get header row
+    transposed_data = zip(*reader)  
+    for column in transposed_data:
+        noise_level = int(column[2])
+        temperature = convert_temperature(int(column[1]))
+        sleep_time = int(column[4])
+        
+        new_sleep_time = reduce_sleep_time(noise_level, temperature, sleep_time)
+        print("New sleep time:", new_sleep_time)
+
+        
+        
+import csv
+
+print("Is sleep time reduced if temperature level is low and light levels are greater than 70 standard lux? ")
+def reduce_sleep_time(light_level, temperature, sleep_time):
+    if light_level > 70 and temperature == 'low':
+        sleep_time -= 1
+    return sleep_time
+
+# Read data from CSV file
+with open('sleepscore.csv', 'r') as file:
+    reader = csv.reader(file)
+    header = next(reader)  # Skip header row
+    transposed_data = zip(*reader)  
+
+
+for column in transposed_data:
+    light_level = int(column[3])
+    temperature = column[1]      
+    sleep_time = int(column[4])
+    
+    new_sleep_time = reduce_sleep_time(light_level, temperature, sleep_time)
+    print("New sleep time:", new_sleep_time)
+ 
+ 
+import matplotlib.pyplot as plt
+
+# Data from the provided database
+sleep_data = {
+    'Day': list(range(1, 31)),
+    'Temperature': [13, 28, 14, 27, 27, 27, 26, 26, 26, 13, 26, 14, 26, 26, 26, 26, 26, 26, 25, 26, 14, 25, 12, 13, 25, 25, 25, 14, 25, 25],
+    'Sound': [0, 7, 26, 0, 0, 15, 0, 3, 33, 7, 3, 0, 0, 7, 0, 0, 7, 3, 3, 0, 3, 3, 15, 3, 3, 3, 7, 3, 0, 0],
+    'Light': [190, 0, 184, 0, 0, 2, 0, 2, 2, 190, 2, 181, 2, 2, 2, 2, 181, 3, 3, 2, 186, 0, 190, 2, 2, 2, 189, 170, 5, 6],
+    'Sleep Time': [5, 6, 5, 7, 7, 6, 7, 7, 5, 4, 6, 5, 7, 6, 6, 7, 5, 7, 6, 6, 4, 7, 4, 5, 7, 7, 4, 4, 6, 6]
+}
+
+# Plotting
+plt.figure(figsize=(10, 6))
+
+plt.scatter(sleep_data['Sleep Time'], sleep_data['Sound'], color='blue', label='Noise Level')
+plt.scatter(sleep_data['Sleep Time'], sleep_data['Temperature'], color='red', label='Temperature')
+
+plt.xlabel('Sleep Time')
+plt.ylabel('Values')
+plt.title('Sleep Time vs Noise Level and Temperature')
+plt.legend()
+
+plt.tight_layout()
+plt.savefig('sleepscore_plot.png')
+plt.show()
