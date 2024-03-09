@@ -1,3 +1,4 @@
+import csv
 import matplotlib.pyplot as plt
 
 # Data from the provided database
