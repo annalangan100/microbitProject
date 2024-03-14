@@ -56,8 +56,6 @@ print("---------------------------------------")
 for data in data_base[1:]:  
     print("\t\t".join(data))
     
-    
-import csv
 
 day_data = [
     [1, 13, 0, 190],
@@ -92,6 +90,7 @@ day_data = [
     [30, 25, 0, 6]
 ]
 
+
 # Write data to CSV file
 with open("sleepscore.csv", "w", newline="") as file:
     writer = csv.writer(file)
@@ -99,6 +98,20 @@ with open("sleepscore.csv", "w", newline="") as file:
     writer.writerows(day_data)
 
 print("Data has been written to sleepscore.csv.")
+
+csv_data = []
+with open("sleepscore.csv", "r") as file:
+    reader = csv.reader(file)
+    next(reader)  # Skip header row
+    for row in reader:
+        csv_data.append([int(cell) for cell in row])
+
+# Perform testing
+if day_data == csv_data:
+    print("Testing passed: Data written to CSV matches the original data.")
+else:
+    print("Testing failed: Data written to CSV does not match the original data.")
+    
 
 import csv
 
@@ -108,6 +121,8 @@ def calculate_sleep_score(temperature, sound_level, light_level):
     # Check temperature conditions
     if 15 <= temperature <= 20:
         score += 33.333333333  # Increase sleep score by 33.333333333%
+    elif temperature == 22:
+        pass  # No increase in sleep score if temperature is exactly 22
     
     # Check light level conditions
     if light_level < 180:
@@ -134,6 +149,8 @@ def get_sleep_advice(temperature, sound_level, light_level):
     # Temperature advice
     if temperature < 15:
         advice.append("Increase the room temperature to improve sleep.")
+    elif temperature == 13:
+        advice.append("Low temperature detected. Consider adding blankets for better sleep.")
     elif temperature > 20:
         advice.append("Lower the room temperature to improve sleep.")
 
@@ -146,6 +163,31 @@ def get_sleep_advice(temperature, sound_level, light_level):
         advice.append("Reduce noise levels by using earplugs or white noise machines.")
 
     return advice
+
+# Test the sleep score calculation function
+def test_sleep_score_calculation():
+    sleep_score = calculate_sleep_score(22, 40, 150)
+    expected_sleep_score = 33.333333333
+    print("Sleep Score:", sleep_score)
+    if sleep_score == expected_sleep_score:
+        print("Test passed: Sleep score didn't increase when temperature was 22")
+    else:
+        print("Test failed: Sleep score increased when temperature was 22")
+        
+test_sleep_score_calculation()
+
+# Test the sleep advice function
+def test_sleep_advice():
+    advice = get_sleep_advice(13, 20, 150)
+    expected_advice = ["Increase the room temperature to improve sleep."]
+    print("Advice:", advice)
+    if advice == expected_advice:
+        print("Test passed: Advice for low temperature provided when temperature was 13")
+    else:
+        print("Test failed: Advice for low temperature not provided when temperature was 13")
+
+# Run the tests
+test_sleep_advice()
 
 # Ask user for the day number they want to check
 day = int(input("Enter the day number you want to check (1 to 30): "))
@@ -176,8 +218,6 @@ else:
     print("Invalid day number. Please enter a number between 1 and 30.")
 
 
-
-import csv
 
 day_data = [
     [1, 13, 0, 190, 5],
@@ -250,8 +290,6 @@ with open('sleepscore.csv', 'r') as file:
         print("New sleep time:", new_sleep_time)
 
         
-        
-import csv
 
 print("Is sleep time reduced if temperature level is low and light levels are greater than 70 standard lux? ")
 def reduce_sleep_time(light_level, temperature, sleep_time):
